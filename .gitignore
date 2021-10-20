@@ -150,9 +150,6 @@ x509.genkey
 # generated defconfigs
 arch/*/configs/vendor/*_defconfig
 
-# vendor device tree directories
-arch/arm/boot/dts/vendor
-
 #
 #Ignoring Android.bp link file
 #
