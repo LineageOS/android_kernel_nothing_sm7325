@@ -276,7 +276,7 @@ static int qcom_dload_reboot(struct notifier_block *this, unsigned long event,
 			msm_enable_dump_mode(true);
 	}
 
-	if (current_download_mode != QCOM_DOWNLOAD_NODUMP)
+	if (poweroff->in_panic)
 		reboot_mode = REBOOT_WARM;
 
 	return NOTIFY_OK;
