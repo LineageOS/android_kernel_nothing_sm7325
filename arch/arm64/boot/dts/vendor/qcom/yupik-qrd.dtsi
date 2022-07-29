@@ -1006,7 +1006,7 @@
 	qcom,pbs-client = <&pm8350b_pbs2>;
 
 	qcom,Vrms_mv = <1270>;
-	qcom,vmax-mv = <9150>;
+	qcom,vmax-mv = <1830>;  /* 9150 / 5 */
 	qcom,lra-period-us = <5880>;
 	status = "ok";
 
