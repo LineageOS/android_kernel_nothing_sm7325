@@ -34,6 +34,43 @@
 		qcom,mdss-dsi-te-dcs-command = <1>;
 		qcom,mdss-dsi-te-check-enable;
 		qcom,mdss-dsi-te-using-te-pin;
+		qcom,fod-dim-lut = <
+		/* brightness, alpha */
+			0	255
+			14	248
+			28	241
+			41	235
+			138	232
+			276	223
+			414	215
+			551	206
+			689	197
+			827	188
+			965	178
+			1103	170
+			1241	161
+			1378	153
+			1516	146
+			1654	139
+			1792	131
+			1930	123
+			2068	115
+			2205	107
+			2343	98
+			2481	89
+			2619	81
+			2757	74
+			2895	67
+			3033	60
+			3170	52
+			3308	45
+			3446	38
+			3460	37
+			3474	36
+			3487	33
+			3501	29
+			3515	24
+		>;
 		qcom,mdss-dsi-display-timings {
 			timing@0 {
 				qcom,mdss-dsi-panel-width = <1080>;
