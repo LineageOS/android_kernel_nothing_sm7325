@@ -36,6 +36,8 @@
 #define DEFAULT_PANEL_PREFILL_LINES	25
 #define HIGH_REFRESH_RATE_THRESHOLD_TIME_US	500
 #define MIN_PREFILL_LINES      40
+#define WAITING_FOR_TE_MAX_TIMES	17
+#define BACKLIGHT_HBM_LEVEL		4094
 
 static void dsi_dce_prepare_pps_header(char *buf, u32 pps_delay_ms)
 {
@@ -390,6 +392,9 @@ static int dsi_panel_power_off(struct dsi_panel *panel)
 					!panel->reset_gpio_always_on)
 		gpio_set_value(panel->reset_config.reset_gpio, 0);
 
+	if (!strcmp("rm692e5 amoled fhd+ 120hz cmd mode dsi visionox panel", panel->name))
+		mdelay(2);
+
 	if (gpio_is_valid(panel->reset_config.lcd_mode_sel_gpio))
 		gpio_set_value(panel->reset_config.lcd_mode_sel_gpio, 0);
 
@@ -537,12 +542,15 @@ static int dsi_panel_wled_register(struct dsi_panel *panel,
 	return 0;
 }
 
+extern int current_refresh_rate;
 static int dsi_panel_update_backlight(struct dsi_panel *panel,
 	u32 bl_lvl)
 {
 	int rc = 0;
+	int i = 0;
 	unsigned long mode_flags = 0;
 	struct mipi_dsi_device *dsi = NULL;
+	u32 timeout_cnt = (current_refresh_rate == 120) ? 4 : 8;
 
 	if (!panel || (bl_lvl > 0xffff)) {
 		DSI_ERR("invalid params\n");
@@ -557,6 +565,18 @@ static int dsi_panel_update_backlight(struct dsi_panel *panel,
 
 	if (panel->bl_config.bl_inverted_dbv)
 		bl_lvl = (((bl_lvl & 0xff) << 8) | (bl_lvl >> 8));
+
+	/*send modify brightness cmd only when TE pin high-"delay 1ms"-low when panel-ic is rm692e5*/
+	/*WAITING_FOR_TE_MAX_TIMES is max times when refresh is 60hz*/
+	if (!strcmp("rm692e5 amoled fhd+ 120hz cmd mode dsi visionox panel", panel->name)) {
+		for (i = 0; i < timeout_cnt; i++) {
+			if (gpio_get_value(panel->bl_config.te_gpio)) {
+				usleep_range(1000, 1100);
+			} else {
+				break;
+			}
+		}
+	}
 
 	rc = mipi_dsi_dcs_set_display_brightness(dsi, bl_lvl);
 	if (rc < 0)
@@ -2431,6 +2451,15 @@ static int dsi_panel_parse_bl_config(struct dsi_panel *panel)
 		panel->bl_config.bl_max_level = MAX_BL_LEVEL;
 	} else {
 		panel->bl_config.bl_max_level = val;
+	}
+
+	rc = utils->read_u32(utils->data, "qcom,mdss-dsi-bl-hbm-level", &val);
+	if (rc) {
+		DSI_DEBUG("[%s] bl-hbm-level unspecified, defaulting to hbm level\n",
+		          panel->name);
+		panel->bl_config.bl_hbm_level = HBM_BL_LEVEL;
+	} else {
+		panel->bl_config.bl_hbm_level = val;
 	}
 
 	rc = utils->read_u32(utils->data, "qcom,mdss-brightness-max-level",
