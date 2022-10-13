@@ -176,6 +176,25 @@ static const struct backlight_ops sde_backlight_device_ops = {
 	.get_brightness = sde_backlight_device_get_brightness,
 };
 
+void sde_connector_hbm_control(struct sde_connector *c_conn,
+	bool status)
+{
+	struct dsi_display *display;
+
+	display = (struct dsi_display *) c_conn->display;
+	if (rm692e5_aod_flag == 1) {
+		if (status) {
+			dsi_panel_set_nolp(display->panel);
+		} else {
+			dsi_panel_set_lp1(display->panel);
+		}
+	}
+
+	rm692e5_hbm_flag = status ? 1 : 0;
+
+	sde_backlight_device_update_status(c_conn->bl_device);
+}
+
 static int sde_backlight_cooling_cb(struct notifier_block *nb,
 					unsigned long val, void *data)
 {
