@@ -91,8 +91,6 @@ struct fts_gesture_st {
     u16 coordinate_y[FTS_GESTURE_POINTS_MAX];
 };
 
-int point = 1;
-int finger = 0;
 /*****************************************************************************
 * Static variables
 *****************************************************************************/
@@ -127,26 +125,13 @@ static ssize_t fts_gesture_store(
     struct device_attribute *attr, const char *buf, size_t count)
 {
     struct fts_ts_data *ts_data = dev_get_drvdata(dev);
-    unsigned long buf_mode;
-    int rc = 0;
 
     mutex_lock(&ts_data->input_dev->mutex);
-    rc = kstrtoul(buf, 0, &buf_mode);
-    if (buf_mode == 1){
-        point = 1;
-    } else if (buf_mode == 2){
-        point = 0;
-    } else if (buf_mode == 3){
-        finger = 1;
-    } else if (buf_mode == 4){
-        finger = 0;
-    }
-    FTS_DEBUG("gesture point: %d; finger: %d;\n", point, finger);
-    if (!((point + finger) == 0)) {
-        FTS_DEBUG("enable gesture\n");
+    if (FTS_SYSFS_ECHO_ON(buf)) {
+        FTS_DEBUG("enable gesture");
         ts_data->gesture_support = ENABLE;
-    } else if ((point + finger) == 0) {
-        FTS_DEBUG("disable gesture\n");
+    } else if (FTS_SYSFS_ECHO_OFF(buf)) {
+        FTS_DEBUG("disable gesture");
         ts_data->gesture_support = DISABLE;
     }
     mutex_unlock(&ts_data->input_dev->mutex);
@@ -349,7 +334,7 @@ static void fts_gesture_report(struct fts_ts_data *ts_data,struct input_dev *inp
         break;
     }
     /* report event key */
-    if((gesture_id == 0x26) && (finger == 1)) {
+    if(gesture_id == 0x26) {
         fts_read_fod_info(ts_data);
         if( (ts_data->fod_info.fp_down) &&(!ts_data->fod_info.fp_down_report)) {
             ts_data->fod_info.fp_down_report = 1;
@@ -363,7 +348,7 @@ static void fts_gesture_report(struct fts_ts_data *ts_data,struct input_dev *inp
             input_report_key(input_dev, gesture, 0);
             input_sync(input_dev);
         }
-    } else if ((gesture != -1) && (point == 1)) {
+    } else if (gesture != -1) {
         FTS_DEBUG("Gesture Code=%d", gesture);
         input_report_key(input_dev, gesture, 1);
         input_sync(input_dev);
