@@ -210,14 +210,20 @@ static ssize_t fts_gesture_bm_store(
 static ssize_t fts_gesture_fod_pressed_show(
     struct device *dev, struct device_attribute *attr, char *buf)
 {
+    int fp_x = 0;
+    int fp_y = 0;
     int fp_down = 0;
     struct fts_ts_data *ts_data = dev_get_drvdata(dev);
 
     mutex_lock(&ts_data->input_dev->mutex);
     fp_down = ts_data->fod_info.fp_down;
+    if (fp_down) {
+        fp_x = ts_data->fod_info.fp_x;
+        fp_y = ts_data->fod_info.fp_y;
+    }
     mutex_unlock(&ts_data->input_dev->mutex);
 
-    return snprintf(buf, PAGE_SIZE, "%u\n", fp_down);
+    return sprintf(buf, "%d,%d,%d\n", fp_x, fp_y, fp_down);
 }
 
 /* sysfs gesture node
