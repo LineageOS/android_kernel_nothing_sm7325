@@ -84,17 +84,17 @@
 				qcom,mdss-dsi-v-back-porch = <16>;
 				qcom,mdss-dsi-v-front-porch = <16>;
 				qcom,mdss-dsi-v-pulse-width = <21>;
-				qcom,mdss-dsi-panel-framerate = <60>;
+				qcom,mdss-dsi-panel-framerate = <120>;
 
 				qcom,mdss-dsi-timing-switch-command = [
 						15 01 00 00 00 00 02 FE 40
-						15 01 00 00 00 00 02 BD 00
-						15 01 00 00 22 00 02 FE 00
+						15 01 00 00 00 00 02 BD 07
+						15 01 00 00 11 00 02 FE 00
 				];
 
 				qcom,mdss-dsi-on-command = [
 						15 01 00 00 00 00 02 FE 40
-						15 01 00 00 22 00 02 BD 00
+						15 01 00 00 11 00 02 BD 07
 						15 01 00 00 00 00 02 FE D2
 						15 01 00 00 00 00 02 50 11
 						15 01 00 00 00 00 02 51 AB
@@ -382,17 +382,17 @@
 				qcom,mdss-dsi-v-back-porch = <16>;
 				qcom,mdss-dsi-v-front-porch = <16>;
 				qcom,mdss-dsi-v-pulse-width = <21>;
-				qcom,mdss-dsi-panel-framerate = <120>;
+				qcom,mdss-dsi-panel-framerate = <60>;
 
 				qcom,mdss-dsi-timing-switch-command = [
 						15 01 00 00 00 00 02 FE 40
-						15 01 00 00 00 00 02 BD 07
-						15 01 00 00 11 00 02 FE 00
+						15 01 00 00 00 00 02 BD 00
+						15 01 00 00 22 00 02 FE 00
 				];
 
 				qcom,mdss-dsi-on-command = [
 						15 01 00 00 00 00 02 FE 40
-						15 01 00 00 11 00 02 BD 07
+						15 01 00 00 22 00 02 BD 00
 						15 01 00 00 00 00 02 FE D2
 						15 01 00 00 00 00 02 50 11
 						15 01 00 00 00 00 02 51 AB
