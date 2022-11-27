@@ -224,6 +224,21 @@ static ssize_t fts_gesture_fod_pressed_show(
     return sprintf(buf, "%d,%d,%d\n", fp_x, fp_y, fp_down);
 }
 
+static ssize_t fts_gesture_single_tap_pressed_show(
+    struct device *dev, struct device_attribute *attr, char *buf)
+{
+    int single_tap_pressed = 0;
+    struct fts_ts_data *ts_data = dev_get_drvdata(dev);
+
+    mutex_lock(&ts_data->input_dev->mutex);
+    if (ts_data->gesture_support) {
+        single_tap_pressed = ts_data->single_tap_pressed;
+    }
+    mutex_unlock(&ts_data->input_dev->mutex);
+
+    return snprintf(buf, PAGE_SIZE, "%u\n", single_tap_pressed);
+}
+
 /* sysfs gesture node
  *   read example: cat  fts_gesture_mode       ---read gesture mode
  *   write example:echo 1 > fts_gesture_mode   --- write gesture mode to 1
@@ -243,11 +258,15 @@ static DEVICE_ATTR(fts_gesture_bm, S_IRUGO | S_IWUSR,
 static DEVICE_ATTR(fts_gesture_fod_pressed, S_IRUGO,
                    fts_gesture_fod_pressed_show, NULL);
 
+static DEVICE_ATTR(fts_gesture_single_tap_pressed, S_IRUGO,
+                   fts_gesture_single_tap_pressed_show, NULL);
+
 static struct attribute *fts_gesture_mode_attrs[] = {
     &dev_attr_fts_gesture_mode.attr,
     &dev_attr_fts_gesture_buf.attr,
     &dev_attr_fts_gesture_bm.attr,
     &dev_attr_fts_gesture_fod_pressed.attr,
+    &dev_attr_fts_gesture_single_tap_pressed.attr,
     NULL,
 };
 
@@ -368,6 +387,9 @@ static void fts_gesture_report(struct fts_ts_data *ts_data,struct input_dev *inp
             input_report_key(input_dev, gesture, 0);
             input_sync(input_dev);
         }
+    } else if (gesture_id == 0x25) {
+        ts_data->single_tap_pressed = 1;
+        sysfs_notify(&ts_data->dev->kobj, NULL, "fts_gesture_single_tap_pressed");
     } else if (gesture != -1) {
         FTS_DEBUG("Gesture Code=%d", gesture);
         input_report_key(input_dev, gesture, 1);

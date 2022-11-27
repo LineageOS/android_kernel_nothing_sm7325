@@ -256,6 +256,7 @@ struct fts_ts_data {
 #elif defined(CONFIG_HAS_EARLYSUSPEND)
     struct early_suspend early_suspend;
 #endif
+    int single_tap_pressed;
 };
 
 enum _FTS_BUS_TYPE {
