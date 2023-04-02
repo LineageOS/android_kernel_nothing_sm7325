@@ -130,19 +130,18 @@ static ssize_t fts_edge_mode_store(
     struct fts_ts_data *ts_data = fts_data;
 
     if (FTS_SYSFS_ECHO_ON(buf)) {
-        if (!ts_data->edge_mode) {
-            FTS_DEBUG("enter edge mode");
-              if (buf[0] == '1' ) /*USB in right*/{
+        FTS_DEBUG("enter edge mode");
+        if ((ts_data->edge_mode != '1') && (buf[0] == '1')) /*USB in right*/{
                 ret = fts_ex_mode_switch(MODE_EDGE, 1);
                 if (ret >= 0) {
                     ts_data->edge_mode = 1;
                 }
-        }else if (buf[0] == '2') /*USB in left*/{
+        }
+        if ((ts_data->edge_mode != '2') && (buf[0] == '2')) /*USB in left*/{
             ret = fts_ex_mode_switch(MODE_EDGE, 2);
                if (ret >= 0) {
                     ts_data->edge_mode = 2;
                 }
-            }
         }
     } else if (FTS_SYSFS_ECHO_OFF(buf)) {
         if (ts_data->edge_mode) {
