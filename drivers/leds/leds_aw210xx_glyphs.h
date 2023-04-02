@@ -51,6 +51,61 @@ uint32_t aw21018_ringtone_10[]=
 	#include "Glyphs_Led_Pack/Ringtones/scribble.csv"
 };
 
+uint32_t aw21018_ringtone_11[]=
+{
+	#include "Glyphs_Led_Pack/Ringtones/karha.csv"
+};
+
+uint32_t aw21018_ringtone_12[]=
+{
+	#include "Glyphs_Led_Pack/Ringtones/woo_yeh.csv"
+};
+
+uint32_t aw21018_ringtone_13[]=
+{
+	#include "Glyphs_Led_Pack/Ringtones/pet.csv"
+};
+
+uint32_t aw21018_ringtone_14[]=
+{
+	#include "Glyphs_Led_Pack/Ringtones/wow!.csv"
+};
+
+uint32_t aw21018_ringtone_15[]=
+{
+	#include "Glyphs_Led_Pack/Ringtones/pepelu.csv"
+};
+
+uint32_t aw21018_ringtone_16[]=
+{
+	#include "Glyphs_Led_Pack/Ringtones/burrow.csv"
+};
+
+uint32_t aw21018_ringtone_17[]=
+{
+	#include "Glyphs_Led_Pack/Ringtones/latency.csv"
+};
+
+uint32_t aw21018_ringtone_18[]=
+{
+	#include "Glyphs_Led_Pack/Ringtones/molitor.csv"
+};
+
+uint32_t aw21018_ringtone_19[]=
+{
+	#include "Glyphs_Led_Pack/Ringtones/forever.csv"
+};
+
+uint32_t aw21018_ringtone_20[]=
+{
+	#include "Glyphs_Led_Pack/Ringtones/flutter.csv"
+};
+
+uint32_t aw21018_ringtone_21[]=
+{
+	#include "Glyphs_Led_Pack/Ringtones/bug.csv"
+};
+
 uint32_t aw21018_notification_1[]=
 {
 	#include "Glyphs_Led_Pack/Notification/oi!.csv"
@@ -99,6 +154,61 @@ uint32_t aw21018_notification_9[]=
 uint32_t aw21018_notification_10[]=
 {
 	#include "Glyphs_Led_Pack/Notification/nope.csv"
+};
+
+uint32_t aw21018_notification_11[]=
+{
+	#include "Glyphs_Led_Pack/Notification/zip.csv"
+};
+
+uint32_t aw21018_notification_12[]=
+{
+	#include "Glyphs_Led_Pack/Notification/gargle.csv"
+};
+
+uint32_t aw21018_notification_13[]=
+{
+	#include "Glyphs_Led_Pack/Notification/why.csv"
+};
+
+uint32_t aw21018_notification_14[]=
+{
+	#include "Glyphs_Led_Pack/Notification/cough.csv"
+};
+
+uint32_t aw21018_notification_15[]=
+{
+	#include "Glyphs_Led_Pack/Notification/skim.csv"
+};
+
+uint32_t aw21018_notification_16[]=
+{
+	#include "Glyphs_Led_Pack/Notification/pep.csv"
+};
+
+uint32_t aw21018_notification_17[]=
+{
+	#include "Glyphs_Led_Pack/Notification/fox.csv"
+};
+
+uint32_t aw21018_notification_18[]=
+{
+	#include "Glyphs_Led_Pack/Notification/simmer.csv"
+};
+
+uint32_t aw21018_notification_19[]=
+{
+	#include "Glyphs_Led_Pack/Notification/woo.csv"
+};
+
+uint32_t aw21018_notification_20[]=
+{
+	#include "Glyphs_Led_Pack/Notification/yeh.csv"
+};
+
+uint32_t aw21018_notification_21[]=
+{
+	#include "Glyphs_Led_Pack/Notification/nfcComplete.csv"
 };
 
 /*

@@ -100,6 +100,17 @@ aw210xx_effect_cfg_t aw210xx_ringtone_leds_effect[] = {
 	{aw21018_ringtone_8, sizeof(aw21018_ringtone_8)/sizeof(aw21018_ringtone_8[0])},
 	{aw21018_ringtone_9, sizeof(aw21018_ringtone_9)/sizeof(aw21018_ringtone_9[0])},
 	{aw21018_ringtone_10, sizeof(aw21018_ringtone_10)/sizeof(aw21018_ringtone_10[0])},
+    {aw21018_ringtone_11, sizeof(aw21018_ringtone_11)/sizeof(aw21018_ringtone_11[0])},
+	{aw21018_ringtone_12, sizeof(aw21018_ringtone_12)/sizeof(aw21018_ringtone_12[0])},
+	{aw21018_ringtone_13, sizeof(aw21018_ringtone_13)/sizeof(aw21018_ringtone_13[0])},
+	{aw21018_ringtone_14, sizeof(aw21018_ringtone_14)/sizeof(aw21018_ringtone_14[0])},
+	{aw21018_ringtone_15, sizeof(aw21018_ringtone_15)/sizeof(aw21018_ringtone_15[0])},
+	{aw21018_ringtone_16, sizeof(aw21018_ringtone_16)/sizeof(aw21018_ringtone_16[0])},
+	{aw21018_ringtone_17, sizeof(aw21018_ringtone_17)/sizeof(aw21018_ringtone_17[0])},
+	{aw21018_ringtone_18, sizeof(aw21018_ringtone_18)/sizeof(aw21018_ringtone_18[0])},
+	{aw21018_ringtone_19, sizeof(aw21018_ringtone_19)/sizeof(aw21018_ringtone_19[0])},
+	{aw21018_ringtone_20, sizeof(aw21018_ringtone_20)/sizeof(aw21018_ringtone_20[0])},
+	{aw21018_ringtone_21, sizeof(aw21018_ringtone_21)/sizeof(aw21018_ringtone_21[0])},
 	//{aw21018_ringtone_test, sizeof(aw21018_ringtone_test)/sizeof(aw21018_ringtone_test[0])}
 };
 
@@ -114,6 +125,17 @@ aw210xx_effect_cfg_t aw210xx_notification_leds_effect[] = {
 	{aw21018_notification_8, sizeof(aw21018_notification_8)/sizeof(aw21018_notification_8[0])},
 	{aw21018_notification_9, sizeof(aw21018_notification_9)/sizeof(aw21018_notification_9[0])},
 	{aw21018_notification_10, sizeof(aw21018_notification_10)/sizeof(aw21018_notification_10[0])},
+	{aw21018_notification_11, sizeof(aw21018_notification_11)/sizeof(aw21018_notification_11[0])},
+	{aw21018_notification_12, sizeof(aw21018_notification_12)/sizeof(aw21018_notification_12[0])},
+	{aw21018_notification_13, sizeof(aw21018_notification_13)/sizeof(aw21018_notification_13[0])},
+	{aw21018_notification_14, sizeof(aw21018_notification_14)/sizeof(aw21018_notification_14[0])},
+	{aw21018_notification_15, sizeof(aw21018_notification_15)/sizeof(aw21018_notification_15[0])},
+	{aw21018_notification_16, sizeof(aw21018_notification_16)/sizeof(aw21018_notification_16[0])},
+	{aw21018_notification_17, sizeof(aw21018_notification_17)/sizeof(aw21018_notification_17[0])},
+	{aw21018_notification_18, sizeof(aw21018_notification_18)/sizeof(aw21018_notification_18[0])},
+	{aw21018_notification_19, sizeof(aw21018_notification_19)/sizeof(aw21018_notification_19[0])},
+	{aw21018_notification_20, sizeof(aw21018_notification_20)/sizeof(aw21018_notification_20[0])},
+	{aw21018_notification_21, sizeof(aw21018_notification_21)/sizeof(aw21018_notification_21[0])},
 	//{aw21018_notification_test, sizeof(aw21018_notification_test)/sizeof(aw21018_notification_test[0])},
 };
 
@@ -1994,13 +2016,36 @@ static ssize_t aw210xx_exclamation_leds_effect_store(struct device *dev,
 			}
 			aw210xx_update(aw210xx);
 			aw210xx->exclamation_effect = 1;
-
 		}else if((state == 0) && (aw210xx->exclamation_effect != 0)){
 			for(num = 0; num < 9; num++){
 				aw210xx_single_led_br_set(aw210xx, led[num], 0);
 			}
 			aw210xx_update(aw210xx);
 			aw210xx->exclamation_effect = 0;
+		}
+	}
+	mutex_unlock(&aw210xx->led_mutex);
+	return len;
+}
+
+static ssize_t aw210xx_setting_leds_effect_store(struct device *dev,
+		struct device_attribute *attr,
+		const char *buf, size_t len)
+{
+	struct led_classdev *led_cdev = dev_get_drvdata(dev);
+	struct aw210xx *aw210xx = container_of(led_cdev, struct aw210xx, cdev);
+	int state=0, brightness=0;
+
+	mutex_lock(&aw210xx->led_mutex);
+	if (sscanf(buf, "%d %d ", &state, &brightness) == 2) {
+		if(state == 1){
+			aw210xx_all_white_leds_br_set(aw210xx, brightness);
+			aw210xx_update(aw210xx);
+			aw210xx->setting_leds_effect = 1;
+		}else if((state == 0) && (aw210xx->setting_leds_effect != 0)){
+			aw210xx_all_white_leds_br_set(aw210xx, 0);
+			aw210xx_update(aw210xx);
+			aw210xx->setting_leds_effect = 0;
 		}
 	}
 	mutex_unlock(&aw210xx->led_mutex);
@@ -2071,6 +2116,7 @@ static DEVICE_ATTR(ringtone_delay, 0664, aw210xx_ringtone_delay_show, aw210xx_ri
 static DEVICE_ATTR(ringtone_leds_effect, 0220, NULL, aw210xx_ringtone_leds_effect_store);
 static DEVICE_ATTR(flip_leds_effect, 0220, NULL, aw210xx_flip_leds_effect_store);
 static DEVICE_ATTR(exclamation_leds_effect, 0220, NULL, aw210xx_exclamation_leds_effect_store);
+static DEVICE_ATTR(setting_leds_effect, 0220, NULL, aw210xx_setting_leds_effect_store);
 static DEVICE_ATTR(opdetect, 0664, aw210xx_opdetect_show, NULL);
 static DEVICE_ATTR(stdetect, 0664, aw210xx_stdetect_show, NULL);
 
@@ -2106,6 +2152,7 @@ static struct attribute *aw210xx_attributes[] = {
 	&dev_attr_ringtone_leds_effect.attr,
 	&dev_attr_flip_leds_effect.attr,
 	&dev_attr_exclamation_leds_effect.attr,
+	&dev_attr_setting_leds_effect.attr,
 	&dev_attr_opdetect.attr,
 	&dev_attr_stdetect.attr,
 	NULL,
@@ -2313,6 +2360,7 @@ static void aw210xx_wired_charging_work(struct work_struct *work)
 	int led[9] ={16,13,11,9,12,10,14,15,8};
 	int num =0;
 	int bat_val = (aw210xx->wired_charging >> 16) & 0xFF;
+	int i = 0;
 
 	AW_INFO("enter \n");
 	pm_stay_awake(aw210xx->dev);
@@ -2325,34 +2373,35 @@ static void aw210xx_wired_charging_work(struct work_struct *work)
 		}
 	}
 
-	if((aw210xx->wired_charging & 0xFF) == 0){
-		goto end;
-	}
-
 	for(num = 8 ; (num >= bat_val); num--){
 		aw210xx_single_led_br_set(aw210xx, led[num], 0);
 		aw210xx_update(aw210xx);
 		usleep_range(5000, 5000);
-	}
-	if((aw210xx->wired_charging & 0xFF) == 0){
-		goto end;
+		if((aw210xx->wired_charging & 0xFF) == 0){
+			goto end;
+		}
 	}
 
-	usleep_range(2000000, 2000000);
-
-	if((aw210xx->wired_charging & 0xFF) == 0){
-		goto end;
+	for(i = 0; i < 100; i++){
+		usleep_range(20000, 20000);
+		if((aw210xx->wired_charging & 0xFF) == 0){
+			goto end;
+		}
 	}
 
 	for((num = bat_val -1); num >= 0; num--){
 		aw210xx_single_led_br_set(aw210xx, led[num], 0);
 		aw210xx_update(aw210xx);
 		usleep_range(11000, 11000);
+		if((aw210xx->wired_charging & 0xFF) == 0){
+			goto end;
+		}
 	}
 
 end:
 	aw210xx_all_white_leds_br_set(aw210xx, 0);
 	aw210xx_update(aw210xx);
+	//aw210xx->wired_charging = 0;
 	pm_relax(aw210xx->dev);
 	AW_INFO("end \n");
 }
@@ -2367,6 +2416,7 @@ static void aw210xx_wlr_charging_work(struct work_struct *work)
 	pm_stay_awake(aw210xx->dev);
 	general_effect_end = 0;
 	aw210xx_update_general_leds_effect(aw210xx, 1);
+	//aw210xx->wlr_charging = 0;
 	aw210xx_all_white_leds_br_set(aw210xx, 0);
 	aw210xx_update(aw210xx);
 	pm_relax(aw210xx->dev);
@@ -2600,6 +2650,7 @@ static void aw210xx_flip_effect_work(struct work_struct *work)
 	pm_stay_awake(aw210xx->dev);
 	general_effect_end = 0;
 	aw210xx_update_general_leds_effect(aw210xx, 2);
+	//aw210xx->flip_effect = 0;
 	aw210xx_all_white_leds_br_set(aw210xx, 0);
 	aw210xx_update(aw210xx);
 	pm_relax(aw210xx->dev);

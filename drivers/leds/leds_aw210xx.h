@@ -386,6 +386,7 @@ struct aw210xx {
 	int ringtone_effect;
 	int flip_effect;
 	int exclamation_effect;
+	int setting_leds_effect;
 	aw210xx_music_state_t music_effect;
 	aw210xx_r_cam_state_t r_cam_effect;
 	uint8_t sdmd_flag;
