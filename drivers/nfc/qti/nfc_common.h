@@ -82,7 +82,7 @@
 // Ioctls
 // The type should be aligned with MW HAL definitions
 
-#define NFC_SET_PWR		_IOW(NFC_MAGIC, 0x01, long)
+#define NFC_SET_PWR		_IOW(NFC_MAGIC, 0x01, unsigned int)
 #define ESE_SET_PWR		_IOW(NFC_MAGIC, 0x02, unsigned int)
 #define ESE_GET_PWR		_IOR(NFC_MAGIC, 0x03, unsigned int)
 #define NFC_GET_PLATFORM_TYPE	_IO(NFC_MAGIC, 0x04)
