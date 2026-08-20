@@ -2163,6 +2163,15 @@ static ssize_t aw210xx_stdetect_show(struct device *dev,
 	return len;
 }
 
+static ssize_t aw210xx_device_color_show(struct device *dev,
+		struct device_attribute *attr, char *buf)
+{
+	char color[6] = {0};
+
+	aw210xx_read_device_color("/mnt/vendor/persist/color", color, 5);
+	return sprintf(buf, "%s\n", strlen(color) ? color : "black");
+}
+
 static DEVICE_ATTR(reg, 0664, aw210xx_reg_show, aw210xx_reg_store);
 static DEVICE_ATTR(hwen, 0664, aw210xx_hwen_show, aw210xx_hwen_store);
 static DEVICE_ATTR(glo_current, 0664, aw210xx_glo_current_show, aw210xx_glo_current_store);
@@ -2198,6 +2207,7 @@ static DEVICE_ATTR(exclamation_leds_effect, 0220, NULL, aw210xx_exclamation_leds
 static DEVICE_ATTR(setting_leds_effect, 0220, NULL, aw210xx_setting_leds_effect_store);
 static DEVICE_ATTR(opdetect, 0664, aw210xx_opdetect_show, NULL);
 static DEVICE_ATTR(stdetect, 0664, aw210xx_stdetect_show, NULL);
+static DEVICE_ATTR(device_color, 0444, aw210xx_device_color_show, NULL);
 
 static struct attribute *aw210xx_attributes[] = {
 	&dev_attr_reg.attr,
@@ -2235,6 +2245,7 @@ static struct attribute *aw210xx_attributes[] = {
 	&dev_attr_setting_leds_effect.attr,
 	&dev_attr_opdetect.attr,
 	&dev_attr_stdetect.attr,
+	&dev_attr_device_color.attr,
 	NULL,
 };
 
